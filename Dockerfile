@@ -1,6 +1,8 @@
 FROM php:8.2-apache
 
-RUN a2dismod mpm_event
+RUN a2dismod mpm_event 2>/dev/null; \
+    a2dismod mpm_worker 2>/dev/null; \
+    a2enmod mpm_prefork
 
 RUN apt-get update && apt-get install -y unzip libzip-dev && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install mysqli pdo pdo_mysql zip
