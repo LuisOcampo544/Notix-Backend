@@ -30,12 +30,12 @@ class AuthController {
             errorResponse('El email ya está registrado', 409);
         }
 
-        $hashed = password_hash($password, PASSWORD_BCRYPT);
+      
         $stmt = $db->prepare('INSERT INTO users (name, email, password) VALUES (:name, :email, :password)');
         $stmt->execute([
             'name' => $name,
             'email' => $email,
-            'password' => $hashed
+            'password' => $password
         ]);
 
         $userId = (int)$db->lastInsertId();
