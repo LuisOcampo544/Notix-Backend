@@ -7,10 +7,8 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql zip
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copiar proyecto
+# Copiar proyecto y configuración de Nginx
 COPY . /var/www/html/
-
-# Copiar configuración de Nginx
 COPY nginx.conf /etc/nginx/sites-available/default
 
 # Instalar dependencias PHP
@@ -21,5 +19,5 @@ RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
 
-# Arrancar PHP-FPM y Nginx
-CMD service php8.2-fpm start && nginx -g "daemon off;"
+# Iniciar PHP-FPM en segundo plano y Nginx en primer plano
+CMD sh -c "php-fpm -D && nginx -g 'daemon off;'"
